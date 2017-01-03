@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
 
+  skip_before_action :require_login, only: [:new, :create]
+  skip_before_action :verify_user, only: [:new, :create]
+
   def new
     @user = User.new
   end
@@ -13,6 +16,10 @@ class UsersController < ApplicationController
       flash[:danger] = @user.errors.full_messages.first
       render :new
     end
+  end
+
+  def show
+    
   end
 
   private

@@ -1,5 +1,27 @@
 class SessionsController < ApplicationController
-  
+
+  skip_before_action :require_login, only: [:new, :create]
+  skip_before_action :verify_user, only: [:new, :create, :destroy]
+
   def new
   end
+
+  def create
+    @user = User.find_by(email: params[:email])
+    if @user && @user.authenticate(params[:password])
+      session[:user_id] = @user.id
+      flash[:success] = "You successfully logged in!"
+      redirect_to user_path(@user)
+    else
+      flash.now[:danger] = "Email or password incorrect."
+      render :new
+    end
+  end
+
+  def destroy
+    reset_session
+    flash[:warning] = "You successfully logged out."
+    redirect_to login_path
+  end
+
 end

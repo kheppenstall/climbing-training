@@ -7,10 +7,10 @@ RSpec.describe "User visits login page" do
     visit login_path
     fill_in "email", with: user.email
     fill_in "password", with: "password"
-    click_on "Login"
+    click_on "Enter"
 
     expect(current_path).to eq user_path(user)
-    expect(page).to have_content "You successfully logged in."
+    expect(page).to have_content "You successfully logged in!"
     expect(page).to have_content "Logged in as #{user.name}"
     expect(page).to have_link "Logout"
   end
@@ -19,13 +19,13 @@ RSpec.describe "User visits login page" do
   it "enters invalid credentials" do
     user = create(:user)
 
-    click_on "Login"
+    visit login_path
+    click_on "Enter"
 
     expect(page).to have_content "Email or password incorrect."
     expect(page).to_not have_content "Logged in as #{user.name}"
     expect(page).to_not have_link "Logout"
-    expect(page)
-
-
+    expect(page).to have_link "Login"
+    expect(page).to have_link "Create an Account"
   end
 end
